@@ -1,0 +1,40 @@
+package com.parth.Controller;
+import com.parth.DAO.ManufacturerDao;
+import com.parth.model.Manufacturer;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+@RestController
+@RequestMapping("/manufacturers")
+public class ManufacturerController {
+    @Autowired
+    private ManufacturerDao manufacturerDao;
+   @GetMapping
+    public List<Manufacturer> getAllManufacturers() {
+        return manufacturerDao.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public Manufacturer getManufacturerById(@PathVariable int id) {
+        return manufacturerDao.findById(id);
+    }
+
+    @PostMapping
+    public void addManufacturer(@RequestBody Manufacturer manufacturer) {
+        manufacturerDao.save(manufacturer);
+    }
+    @PutMapping("/{id}")
+    public void updateManufacturer(@PathVariable int id, @RequestBody Manufacturer manufacturer) {
+        manufacturer.setId(id);
+        manufacturerDao.update(manufacturer);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteManufacturer(@PathVariable int id) {
+        Manufacturer manufacturer = manufacturerDao.findById(id);
+        if (manufacturer != null) {
+            manufacturerDao.delete(manufacturer);
+        }
+    }
+}

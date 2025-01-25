@@ -1,0 +1,39 @@
+package com.parth.Controller;
+import com.parth.DAO.OrderDao;
+import com.parth.model.Order;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+@RestController
+@RequestMapping("/orders")
+public class OrderController {
+    @Autowired
+    private OrderDao orderDao;
+    @GetMapping
+    public List<Order> getAllOrders() {
+        return orderDao.findAll();
+    }
+    @GetMapping("/{id}")
+    public Order getOrderById(@PathVariable int id) {
+        return orderDao.findById(id);
+    }
+    @PostMapping
+    public void addOrder(@RequestBody Order order) {
+        orderDao.save(order);
+    }
+
+    @PutMapping("/{id}")
+    public void updateOrder(@PathVariable int id, @RequestBody Order order) {
+        order.setOrderId(id);
+        orderDao.update(order);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteOrder(@PathVariable int id) {
+        Order order = orderDao.findById(id);
+        if (order != null) {
+            orderDao.delete(order);
+        }
+    }
+}

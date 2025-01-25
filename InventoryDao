@@ -1,0 +1,37 @@
+package com.parth.Controller;
+import com.parth.DAO.InventoryDao;
+import com.parth.model.Inventory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+@RestController
+@RequestMapping("/inventory")
+public class InventoryController {
+    @Autowired
+    private InventoryDao inventoryDao;
+    @GetMapping
+    public List<Inventory> getAllInventory() {
+        return inventoryDao.findAll();
+    }
+    @GetMapping("/{id}")
+    public Inventory getInventoryById(@PathVariable int id) {
+        return inventoryDao.findById(id);
+    }
+    @PostMapping
+    public void addInventory(@RequestBody Inventory inventory) {
+        inventoryDao.save(inventory);
+    }
+    @PutMapping("/{id}")
+    public void updateInventory(@PathVariable int id, @RequestBody Inventory inventory) {
+        inventory.setId(id);
+        inventoryDao.update(inventory);
+    }
+    @DeleteMapping("/{id}")
+    public void deleteInventory(@PathVariable int id) {
+        Inventory inventory = inventoryDao.findById(id);
+        if (inventory != null) {
+            inventoryDao.delete(inventory);
+        }
+    }
+}

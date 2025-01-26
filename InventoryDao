@@ -1,0 +1,12 @@
+package com.parth.DAO;
+import com.parth.model.Inventory;
+
+import java.util.List;
+
+public interface InventoryDao {
+    Inventory findById(int id);
+    List<Inventory> findAll();
+    void save(Inventory inventory);
+    void update(Inventory inventory);
+    void delete(Inventory inventory);
+}

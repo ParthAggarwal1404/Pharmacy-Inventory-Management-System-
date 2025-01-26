@@ -1,0 +1,12 @@
+package com.parth.DAO;
+import com.parth.model.Order;
+
+import java.util.List;
+
+public interface OrderDao {
+    Order findById(int id);
+    List<Order> findAll();
+    void save(Order order);
+    void update(Order order);
+    void delete(Order order);
+}

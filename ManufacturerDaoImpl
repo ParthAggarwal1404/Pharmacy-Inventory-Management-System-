@@ -1,0 +1,55 @@
+package com.parth.DAO;
+
+import com.parth.model.Manufacturer;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+@Repository
+public class ManufacturerDaoImpl implements ManufacturerDao {
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+    @Override
+    public Manufacturer findById(int id) {
+        String sql = "SELECT * FROM Manufacturer WHERE id = ?";
+        return jdbcTemplate.queryForObject(sql, new ManufacturerMapper(), id);
+    }
+    @Override
+    public List<Manufacturer> findAll() {
+        String sql = "SELECT * FROM Manufacturer";
+        return jdbcTemplate.query(sql, new ManufacturerMapper());
+    }
+    @Override
+    public void save(Manufacturer manufacturer) {
+        String sql = "INSERT INTO Manufacturer (name, address, contact) VALUES (?, ?, ?)";
+        jdbcTemplate.update(sql, manufacturer.getName(), manufacturer.getAddress(), manufacturer.getContact());
+    }
+
+    @Override
+    public void update(Manufacturer manufacturer) {
+        String sql = "UPDATE Manufacturer SET name = ?, address = ?, contact = ? WHERE id = ?";
+        jdbcTemplate.update(sql, manufacturer.getName(), manufacturer.getAddress(), manufacturer.getContact(), manufacturer.getId());
+    }
+
+    @Override
+    public void delete(Manufacturer manufacturer) {
+        String sql = "DELETE FROM Manufacturer WHERE id = ?";
+        jdbcTemplate.update(sql, manufacturer.getId());
+    }
+
+    private static class ManufacturerMapper implements RowMapper<Manufacturer> {
+        @Override
+        public Manufacturer mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Manufacturer manufacturer = new Manufacturer();
+            manufacturer.setId(rs.getInt("id"));
+            manufacturer.setName(rs.getString("name"));
+            manufacturer.setAddress(rs.getString("address"));
+            manufacturer.setContact(rs.getString("contact"));
+            return manufacturer;
+        }
+    }
+}

@@ -1,0 +1,60 @@
+package com.parth.model;
+import java.util.Date;
+
+public class Order {
+    private int orderId;
+    private Date orderDate;
+    private Date deliveryDate;
+    private double totalCost;
+    private int employeeid;
+
+    public Order() {
+    }
+
+    public Order(int orderId, Date orderDate, Date deliveryDate, double totalCost, int employeeid) {
+        this.orderId = orderId;
+        this.orderDate = orderDate;
+        this.deliveryDate = deliveryDate;
+        this.totalCost = totalCost;
+        this.employeeid = employeeid;
+    }
+
+    // Getters and Setters
+    public int getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
+    }
+
+    public Date getOrderDate() {
+        return orderDate;
+    }
+
+    public void setOrderDate(Date orderDate) {
+        this.orderDate = orderDate;
+    }
+
+    public Date getDeliveryDate() {
+        return deliveryDate;
+    }
+
+    public void setDeliveryDate(Date deliveryDate) {
+        this.deliveryDate = deliveryDate;
+    }
+
+    public double getTotalCost() {
+        return totalCost;
+    }
+
+    public void setTotalCost(double totalCost) {
+        this.totalCost = totalCost;
+    }
+    public void setEmployeeId(int employeeid) {
+    	this.employeeid = employeeid;
+    }
+    public int getEmployeeid() {
+    	return employeeid;
+    }
+}

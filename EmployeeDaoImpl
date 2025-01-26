@@ -1,0 +1,48 @@
+package com.parth.DAO;
+import com.parth.model.Employee;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+@Repository
+public class EmployeeDaoImpl implements EmployeeDao {
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+    @Override
+    public Employee getEmployeeById(Long id) {
+        String query = "SELECT * FROM Employee WHERE id = ?";
+        return jdbcTemplate.queryForObject(query, new EmployeeMapper(), id);
+    }
+    @Override
+    public List<Employee> getAllEmployees() {
+        String query = "SELECT * FROM Employee";
+        return jdbcTemplate.query(query, new EmployeeMapper());
+    }
+    @Override
+    public void addEmployee(Employee employee) {
+        String query = "INSERT INTO Employee (name, salary) VALUES (?, ?)";
+        jdbcTemplate.update(query, employee.getName(), employee.getSalary());
+    }
+    @Override
+    public void updateEmployee(Employee employee) {
+        String query = "UPDATE Employee SET name = ?, salary = ? WHERE id = ?";
+        jdbcTemplate.update(query, employee.getName(), employee.getSalary(), employee.getId());
+    }
+    @Override
+    public void deleteEmployee(Long id) {
+        String query = "DELETE FROM Employee WHERE id = ?";
+        jdbcTemplate.update(query, id);
+    }
+    private static class EmployeeMapper implements RowMapper<Employee> {
+        @Override
+        public Employee mapRow(ResultSet resultSet, int i) throws SQLException {
+            long id = resultSet.getLong("id");
+            String name = resultSet.getString("name");
+            double salary = resultSet.getDouble("salary");
+            return new Employee(id, name, salary);
+        }
+    }
+}

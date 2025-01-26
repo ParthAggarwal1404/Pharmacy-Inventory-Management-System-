@@ -1,0 +1,52 @@
+package com.parth.DAO;
+import com.parth.model.Inventory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+@Repository
+public class InventoryDaoImpl implements InventoryDao {
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+    @Override
+    public Inventory findById(int id) {
+        String sql = "SELECT * FROM Inventory WHERE id = ?";
+        return jdbcTemplate.queryForObject(sql, new InventoryMapper(), id);
+    }
+    @Override
+    public List<Inventory> findAll() {
+        String sql = "SELECT * FROM Inventory";
+        return jdbcTemplate.query(sql, new InventoryMapper());
+    }
+    @Override
+    public void save(Inventory inventory) {
+        String sql = "INSERT INTO Inventory (name, quantity, price, expirationdate) VALUES (?, ?, ?, ?)";
+        jdbcTemplate.update(sql, inventory.getName(), inventory.getQuantity(), inventory.getPrice(), inventory.getExpirationDate());
+    }
+    @Override
+    public void update(Inventory inventory) {
+        String sql = "UPDATE Inventory SET name = ?, quantity = ?, price = ?, expirationdate = ? WHERE id = ?";
+        jdbcTemplate.update(sql, inventory.getName(), inventory.getQuantity(), inventory.getPrice(), inventory.getExpirationDate(), inventory.getId());
+    }
+    @Override
+    public void delete(Inventory inventory) {
+        String sql = "DELETE FROM Inventory WHERE id = ?";
+        jdbcTemplate.update(sql, inventory.getId());
+    }
+    private static class InventoryMapper implements RowMapper<Inventory> {
+        @Override
+        public Inventory mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Inventory inventory = new Inventory();
+            inventory.setId(rs.getInt("id"));
+            inventory.setName(rs.getString("name"));
+            inventory.setQuantity(rs.getInt("quantity"));
+            inventory.setPrice(rs.getDouble("price"));
+            inventory.setExpirationDate(rs.getDate("expirationdate"));
+            return inventory;
+        }
+    }
+}

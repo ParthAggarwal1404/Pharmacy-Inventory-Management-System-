@@ -1,0 +1,12 @@
+package com.parth.DAO;
+import com.parth.model.Manufacturer;
+
+import java.util.List;
+
+public interface ManufacturerDao {
+    Manufacturer findById(int id);
+    List<Manufacturer> findAll();
+    void save(Manufacturer manufacturer);
+    void update(Manufacturer manufacturer);
+    void delete(Manufacturer manufacturer);
+}
